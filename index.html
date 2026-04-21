@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ekta — The Architectural Ledger · UX Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --spacing-xs:.25rem;--spacing-sm:.5rem;--spacing-md:.75rem;--spacing-lg:1rem;--spacing-xl:1.5rem;--spacing-2xl:2rem;--spacing-3xl:3rem;
+  --bg0:#050d1a;--bg1:#0b1326;--bg2:#101a33;--surface:rgba(13,24,48,.66);--surface2:rgba(18,32,62,.78);
+  --bd:rgba(129,161,230,.26);--bd-soft:rgba(129,161,230,.16);
+  --primary:#00b6d6;--secondary:#ff6b6b;--accent:#00c8a3;--sun:#f4b94a;
+  --txt:#f2f8ff;--txt-dim:rgba(226,237,255,.76);--txt-muted:rgba(184,205,234,.68);
+  --shadow-1:0 8px 30px rgba(2,8,23,.28);--shadow-2:0 18px 46px rgba(4,13,31,.46);--radius:18px;--radius-sm:10px;
+  --font-body:'Manrope',sans-serif;--font-display:'Sora',sans-serif;
+  --night:var(--bg0);--night2:var(--surface);--night3:var(--surface2);--p:var(--primary);--pl:#78e2ff;--pg:rgba(0,182,214,.25);
+  --acc:#99ffe6;--cr:var(--secondary);--gd:var(--accent);--wn:var(--sun);--wh:var(--txt);--body:var(--txt-dim);--muted:var(--txt-muted);--r:var(--radius);--rs:var(--radius-sm)
+}
+[data-theme="editorial"]{
+  --bg0:#f5f6f8;--bg1:#eceff3;--bg2:#dfe6ee;--surface:rgba(255,255,255,.78);--surface2:rgba(255,255,255,.88);
+  --bd:rgba(15,52,96,.22);--bd-soft:rgba(15,52,96,.14);
+  --primary:#067a96;--secondary:#cc4a62;--accent:#0a9f84;--sun:#af7a14;
+  --txt:#0d1a2d;--txt-dim:rgba(20,39,66,.82);--txt-muted:rgba(31,62,99,.66);
+  --font-display:'Cormorant Garamond',serif;
+  --shadow-1:0 10px 30px rgba(12,31,62,.1);--shadow-2:0 18px 40px rgba(12,31,62,.16);--pl:#0088a9
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body);
+  color:var(--txt);
+  line-height:1.66;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(1200px 700px at 8% -4%,rgba(0,182,214,.22),transparent 55%),
+    radial-gradient(900px 680px at 95% 2%,rgba(0,200,163,.15),transparent 50%),
+    linear-gradient(160deg,var(--bg0),var(--bg1) 45%,#15203b);
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative
+}
+[data-theme="editorial"] body{
+  background:
+    radial-gradient(900px 650px at 8% 2%,rgba(6,122,150,.16),transparent 56%),
+    radial-gradient(920px 720px at 92% 4%,rgba(10,159,132,.11),transparent 52%),
+    linear-gradient(150deg,var(--bg0),var(--bg1) 48%,var(--bg2))
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:-20%;
+  pointer-events:none;
+  z-index:-1;
+  background:
+    radial-gradient(circle at 70% 30%,rgba(0,182,214,.12),transparent 34%),
+    radial-gradient(circle at 30% 70%,rgba(255,107,107,.08),transparent 32%);
+  animation:drift 16s ease-in-out infinite alternate
+}
+::selection{background:color-mix(in srgb,var(--primary) 72%,#fff);color:#04242f}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:#050b19}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--primary),var(--accent));border-radius:10px}
+
+.wrap{max-width:1160px;margin:0 auto;padding:0 2rem;position:relative;z-index:1}
+section{padding:6.5rem 0;position:relative}
+section+section{border-top:1px solid var(--bd-soft)}
+img{display:block;max-width:100%}
+.sec-art{position:absolute;pointer-events:none;z-index:0;opacity:.65;filter:drop-shadow(0 12px 30px rgba(0,0,0,.2));will-change:transform}
+.sec-art svg{display:block;width:100%;height:100%}
+.sec-art.a{width:170px;height:170px;top:1rem;right:3%}
+.sec-art.b{width:155px;height:155px;bottom:2.2rem;left:2%}
+.sec-art.c{width:180px;height:180px;top:15%;right:4%}
+[data-theme="editorial"] .sec-art{opacity:.44}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:220;height:64px;
+  background:rgba(4,12,26,.64);
+  backdrop-filter:blur(18px) saturate(140%);
+  border-bottom:1px solid rgba(120,226,255,.2)
+}
+[data-theme="editorial"] nav{background:rgba(255,255,255,.74)}
+.nv{max-width:1160px;margin:0 auto;padding:0 2rem;height:100%;display:flex;align-items:center;justify-content:space-between}
+.nl{font-family:var(--font-display);font-size:1rem;font-weight:700;letter-spacing:.03em;color:var(--txt);text-decoration:none}
+.nl span{color:var(--pl)}
+.nm{display:flex;gap:1.45rem;list-style:none}
+.nm a{font-size:.74rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .25s}
+.nm a:hover{color:var(--pl)}
+.nc,.bp,.bg,.theme-toggle{
+  display:inline-flex;align-items:center;gap:.4rem;border-radius:999px;text-decoration:none;
+  padding:.7rem 1.25rem;font-size:.83rem;font-weight:700;letter-spacing:.01em;transition:all .25s ease
+}
+.nc,.bp{
+  color:#031927;
+  border:1px solid transparent;
+  background:linear-gradient(120deg,var(--primary),var(--accent));
+  box-shadow:0 8px 24px rgba(0,182,214,.28)
+}
+.nc:hover,.bp:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 14px 32px rgba(0,182,214,.33)}
+.bg{border:1px solid var(--bd);color:var(--txt-dim);background:rgba(6,20,43,.42)}
+.bg:hover{color:#fff;border-color:rgba(120,226,255,.52);background:rgba(9,28,58,.72)}
+.theme-toggle{border:1px solid var(--bd);color:var(--txt-dim);background:rgba(6,20,43,.35);cursor:pointer;font-family:'Manrope',sans-serif}
+.theme-toggle:hover{color:var(--txt);border-color:rgba(120,226,255,.56);background:rgba(9,28,58,.62)}
+[data-theme="editorial"] .theme-toggle,[data-theme="editorial"] .bg{background:rgba(255,255,255,.8)}
+[data-theme="editorial"] .bg:hover{background:#fff;color:var(--txt)}
+
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:64px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 0%,rgba(0,182,214,.08) 42%,transparent 62%);mix-blend-mode:screen;opacity:.45}
+.hero > .hbg,.hero > .hgrid{will-change:transform}
+.hbg{position:absolute;inset:0;background:
+  radial-gradient(ellipse 80% 55% at 80% 12%,rgba(0,182,214,.24),transparent 60%),
+  radial-gradient(ellipse 52% 48% at 14% 86%,rgba(255,107,107,.15),transparent 62%)}
+.hgrid{position:absolute;inset:0;opacity:.14;background-image:linear-gradient(rgba(120,226,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(120,226,255,.09) 1px,transparent 1px);background-size:62px 62px;mask-image:linear-gradient(to bottom,black 12%,transparent 88%)}
+.hi{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:0 2rem;display:grid;grid-template-columns:1.1fr .9fr;gap:3.4rem;align-items:center}
+.heb{display:inline-flex;align-items:center;gap:.45rem;background:rgba(0,182,214,.14);border:1px solid rgba(0,182,214,.45);padding:.38rem .92rem;border-radius:999px;font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#96ebff;margin-bottom:1.45rem}
+.heb::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:blink 2s ease-in-out infinite}
+h1{font-family:var(--font-display);font-size:clamp(2.6rem,5.5vw,5rem);font-weight:800;line-height:1.01;letter-spacing:-.03em;margin-bottom:1.2rem;max-width:12ch}
+h1 em{font-style:normal;color:var(--pl)}
+.hd{font-size:1.04rem;color:var(--txt-dim);max-width:56ch;line-height:1.78;margin-bottom:2.2rem}
+.hbs{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2.6rem}
+.hst{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem;max-width:740px}
+.hst>div{background:rgba(6,22,44,.55);border:1px solid var(--bd-soft);padding:.95rem .9rem;border-radius:12px;box-shadow:var(--shadow-1)}
+.hn{font-family:var(--font-display);font-size:1.72rem;font-weight:700;line-height:1.05;color:#d1f8ff}
+.hl{font-size:.73rem;color:var(--muted);margin-top:.2rem;text-transform:uppercase;letter-spacing:.08em}
+
+.hv{display:flex;justify-content:center;align-items:center;position:relative}
+.pw{position:relative;width:292px;filter:drop-shadow(0 32px 70px rgba(0,0,0,.52));animation:float 6.5s ease-in-out infinite}
+[data-theme="neon"] .pw{filter:drop-shadow(0 0 32px rgba(0,182,214,.24)) drop-shadow(0 32px 70px rgba(0,0,0,.52))}
+.pf{background:linear-gradient(170deg,#0f1b34,#141f3f);border-radius:42px;border:1.5px solid rgba(188,232,255,.28);overflow:hidden;position:relative;padding:11px}
+.pn{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:78px;height:26px;background:#060f20;border-radius:0 0 14px 14px;z-index:10}
+.ps{border-radius:31px;overflow:hidden;background:#0f1b34;aspect-ratio:9/19.5}
+.ps img{width:100%;height:100%;object-fit:cover;object-position:top}
+.pglow{position:absolute;inset:-50px;border-radius:74px;background:radial-gradient(circle at 50%,rgba(0,182,214,.28),transparent 66%);z-index:-1}
+.fb{position:absolute;background:rgba(5,18,38,.78);border:1px solid var(--bd);border-radius:12px;padding:.62rem .92rem;display:flex;align-items:center;gap:.55rem;white-space:nowrap;backdrop-filter:blur(8px)}
+.fb1{top:10%;right:-48px}.fb2{bottom:20%;left:-52px}
+.fd{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ft{font-size:.71rem;font-weight:800}.fs{font-size:.66rem;color:var(--muted)}
+
+.sl{font-size:.67rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#8beaff;margin-bottom:.78rem;display:flex;align-items:center;gap:.65rem}
+.sl::before{content:'';width:26px;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent))}
+.st{font-family:var(--font-display);font-size:clamp(1.9rem,3.3vw,3rem);font-weight:700;line-height:1.12;letter-spacing:-.025em;margin-bottom:1rem;max-width:18ch}
+.ss{font-size:1rem;color:var(--txt-dim);max-width:62ch;line-height:1.76}
+
+.pc,.rc,.pca,.sca,.bac,.qc,.mc,.sb,.cc,.ac,.skc,.tc,.dc{
+  background:linear-gradient(180deg,rgba(12,26,53,.7),rgba(8,19,40,.82));
+  border:1px solid var(--bd-soft);
+  border-radius:var(--r);
+  box-shadow:var(--shadow-1)
+}
+[data-theme="editorial"] .pc,[data-theme="editorial"] .rc,[data-theme="editorial"] .pca,[data-theme="editorial"] .sca,[data-theme="editorial"] .bac,[data-theme="editorial"] .qc,[data-theme="editorial"] .mc,[data-theme="editorial"] .sb,[data-theme="editorial"] .cc,[data-theme="editorial"] .ac,[data-theme="editorial"] .skc,[data-theme="editorial"] .tc,[data-theme="editorial"] .dc{background-image:linear-gradient(180deg,rgba(255,255,255,.86),rgba(255,255,255,.75)),repeating-linear-gradient(45deg,rgba(8,73,109,.03) 0,rgba(8,73,109,.03) 2px,transparent 2px,transparent 8px)}
+[data-theme="editorial"] .st{letter-spacing:.015em;font-weight:500;color:#041e2a;opacity:.95}
+[data-theme="editorial"] h1{color:#020d18;opacity:.98}
+[data-theme="editorial"] .hd{color:rgba(20,39,66,.76)}
+[data-theme="editorial"] .sl{color:#0a7f95;font-weight:700;letter-spacing:.125em}
+[data-theme="editorial"] .sl::before{background:linear-gradient(90deg,#0a7f95,#0a9f84);height:3px}
+[data-theme="editorial"] .heb{background:rgba(10,127,149,.1);border-color:rgba(10,127,149,.32);color:#0a7f95}
+[data-theme="editorial"] h1 em{color:#0a7f95}
+[data-theme="editorial"] .hn{color:#020d18;font-weight:500;letter-spacing:.02em}
+[data-theme="editorial"] .bp,[data-theme="editorial"] .nc{color:#f4f9ff;font-weight:600}
+[data-theme="editorial"] .hgrid{opacity:.05}
+[data-theme="editorial"] .hero::after{opacity:.12;mix-blend-mode:normal}
+[data-theme="editorial"] section{padding:5.2rem 0}
+[data-theme="editorial"] .ss{line-height:1.82}
+
+[data-theme="neon"] .pc,[data-theme="neon"] .rc,[data-theme="neon"] .pca,[data-theme="neon"] .sca,[data-theme="neon"] .bac,[data-theme="neon"] .qc,[data-theme="neon"] .mc,[data-theme="neon"] .sb,[data-theme="neon"] .cc,[data-theme="neon"] .ac,[data-theme="neon"] .skc,[data-theme="neon"] .tc,[data-theme="neon"] .dc{box-shadow:0 0 0 1.5px rgba(120,226,255,.22),0 0 20px rgba(0,182,214,.18),0 12px 28px rgba(0,17,41,.52)}
+[data-theme="neon"] .pc:hover,[data-theme="neon"] .rc:hover,[data-theme="neon"] .sca:hover,[data-theme="neon"] .ac:hover,[data-theme="neon"] .skc:hover,[data-theme="neon"] .tc:hover,[data-theme="neon"] .qc:hover,[data-theme="neon"] .mc:hover,[data-theme="neon"] .cc:hover{box-shadow:0 0 0 1.5px rgba(120,226,255,.38),0 0 28px rgba(0,182,214,.28),0 18px 40px rgba(0,17,41,.62)}
+
+.pg2{display:grid;grid-template-columns:1fr 1fr;gap:1.15rem;margin-top:2.8rem}
+.pc{padding:1.6rem;transition:transform .25s,border-color .25s,box-shadow .25s}
+.pc:hover,.rc:hover,.sca:hover,.ac:hover,.skc:hover,.tc:hover,.qc:hover,.mc:hover,.cc:hover{transform:translateY(-5px);border-color:rgba(120,226,255,.45);box-shadow:var(--shadow-2)}
+.pc-i{font-size:1.38rem;margin-bottom:.72rem}
+.pc h4{font-size:.95rem;font-weight:800;margin-bottom:.42rem}
+.pc p{font-size:.84rem;color:var(--txt-dim);line-height:1.7}
+.pc.red{border-top:2px solid var(--cr)}.pc.am{border-top:2px solid var(--wn)}.pc.pu{border-top:2px solid var(--primary)}
+.bigs{font-family:var(--font-display);font-size:1.8rem;color:#ff8d8d}
+.hmw{margin-top:2.3rem;padding:1.95rem 2rem;background:linear-gradient(120deg,rgba(0,182,214,.18),rgba(0,200,163,.1));border:1px solid rgba(120,226,255,.3);border-radius:var(--r)}
+.hmwl{font-size:.66rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#8cefff;margin-bottom:.58rem}
+.hmwt{font-family:'Sora',sans-serif;font-size:1.15rem;line-height:1.57;color:var(--txt)}
+
+.pca{padding:2rem;margin-top:2.5rem}
+.pt{display:grid;grid-template-columns:68px 1fr;gap:1.4rem;margin-bottom:1.35rem}
+.av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.33rem;color:#002635;font-weight:800;flex-shrink:0}
+.pn2{font-family:var(--font-display);font-size:1.15rem;font-weight:700;margin-bottom:.2rem}
+.pr{font-size:.8rem;color:var(--muted);margin-bottom:.8rem}
+.tr{display:flex;flex-wrap:wrap;gap:.35rem}
+.tg{background:rgba(0,182,214,.12);border:1px solid rgba(0,182,214,.3);padding:.22rem .67rem;border-radius:20px;font-size:.7rem;color:#95ecff}
+.pq{border-left:2px solid var(--primary);padding:.95rem 1.08rem;background:rgba(0,182,214,.08);border-radius:0 var(--rs) var(--rs) 0;font-style:italic;color:var(--txt-dim);font-size:.9rem;line-height:1.68}
+.rs{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:2rem}
+.rc{padding:1.4rem;transition:transform .25s,border-color .25s,box-shadow .25s}
+.rc h4{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#90ecff;margin-bottom:.9rem}
+.pi{font-size:.8rem;color:var(--txt-dim);padding:.42rem .7rem;background:rgba(255,255,255,.03);border-radius:8px;margin-bottom:.32rem;line-height:1.5}
+.jr{display:flex;justify-content:space-between;font-size:.77rem;padding:.4rem 0;border-bottom:1px solid var(--bd-soft)}
+.jr:last-child{border-bottom:none}
+.js{color:var(--muted)}.je{font-weight:600}
+.eb{color:#ff9898}.ew{color:#ffd16f}.eg{color:#77f2d5}.en{color:var(--txt-dim)}
+
+.pro{display:grid;grid-template-columns:repeat(5,1fr);gap:.58rem;margin-top:3.4rem;position:relative}
+.pro::before{content:'';position:absolute;top:26px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent));z-index:0;opacity:.4}
+.ps2{text-align:center;position:relative;z-index:1}
+.pd{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));margin:0 auto .82rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.03rem;color:#032839;font-weight:800;border:2px solid #07203d;box-shadow:0 0 0 1px rgba(120,226,255,.7)}
+.plb{font-size:.81rem;font-weight:800;margin-bottom:.23rem}
+.psb{font-size:.71rem;color:var(--muted);line-height:1.46;padding:0 .15rem}
+
+.secbg,.skbg{background:linear-gradient(180deg,rgba(8,20,41,.55),rgba(7,16,35,.72))}
+.sgi{display:grid;grid-template-columns:1fr 1fr;gap:2.3rem;align-items:end;margin-bottom:2.65rem}
+.sgr{display:grid;grid-template-columns:repeat(3,1fr);gap:1.35rem}
+.sca{overflow:hidden;transition:transform .28s,border-color .28s,box-shadow .28s;cursor:pointer}
+.sim{height:300px;overflow:hidden;display:flex;align-items:flex-start;justify-content:center}
+.sim img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .45s ease}
+.sca:hover .sim img{transform:scale(1.05)}
+.sinf{padding:1rem 1.15rem 1.2rem}
+.stk{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#91edff;margin-bottom:.28rem}
+.snm{font-size:.9rem;font-weight:800;margin-bottom:.23rem}
+.sds{font-size:.74rem;color:var(--muted);line-height:1.5}
+
+.bap{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-bottom:1.72rem}
+.bac{overflow:hidden}
+.bat{padding:.55rem 1rem;font-size:.67rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.bac.before .bat{background:rgba(255,107,107,.12);color:#ff9b9b;border-bottom:1px solid rgba(255,107,107,.3)}
+.bac.after .bat{background:rgba(0,200,163,.11);color:#82f4d9;border-bottom:1px solid rgba(0,200,163,.35)}
+.bai{height:190px;overflow:hidden;background:#0a1a34;display:flex;align-items:center;justify-content:center}
+.bai img{width:100%;height:100%;object-fit:cover;object-position:top}
+.bab{padding:1.1rem;background:transparent}
+.bab h4{font-size:.86rem;font-weight:800;margin-bottom:.38rem}
+.bab p{font-size:.78rem;color:var(--txt-dim);line-height:1.6}
+.mock{background:rgba(8,21,43,.8);border-radius:var(--rs);padding:1rem;width:180px;border:1px solid var(--bd-soft)}
+.mla{font-size:.59rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem}
+.mbr{height:32px;border:1px solid rgba(255,107,107,.42);border-radius:5px;display:flex;align-items:center;padding:0 .7rem;font-size:.78rem;color:#ff9e9e;background:rgba(255,107,107,.09)}
+.mf{height:30px;background:rgba(255,255,255,.05);border-radius:5px;border:1px solid var(--bd-soft);margin-bottom:.4rem}
+.mps{display:flex;gap:.25rem;margin-top:.1rem}
+.mp{flex:1;height:26px;border-radius:4px;background:rgba(255,255,255,.04);border:1px solid var(--bd-soft);display:flex;align-items:center;justify-content:center;font-size:.58rem;color:var(--muted)}
+.mp.on{background:rgba(0,182,214,.2);border-color:rgba(120,226,255,.55);color:#9df2ff}
+
+.qg{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.45rem}
+.qc{padding:1.4rem;position:relative;transition:transform .24s,border-color .24s}
+.qc::before{content:'\201C';font-family:'Sora',sans-serif;font-size:3rem;line-height:1;position:absolute;top:.6rem;left:1rem;opacity:.45;pointer-events:none}
+.qc.pain::before{color:rgba(255,107,107,.34)}.qc.win::before{color:rgba(0,200,163,.32)}.qc.nt::before{color:rgba(0,182,214,.33)}
+.qt{font-size:.83rem;color:var(--txt-dim);line-height:1.68;font-style:italic;margin-top:1.42rem}
+.qw{margin-top:.88rem;display:flex;align-items:center;gap:.45rem}
+.qdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.qc.pain .qdot{background:var(--cr)}.qc.win .qdot{background:var(--gd)}.qc.nt .qdot{background:var(--primary)}
+.qn{font-size:.73rem;font-weight:800}
+.qc.pain .qn{color:#ff9c9c}.qc.win .qn{color:#78f1d3}.qc.nt .qn{color:#96ecff}
+.qtsk{font-size:.7rem;color:var(--muted)}
+.qi{margin-top:.65rem;padding:.4rem .62rem;border-radius:6px;font-size:.71rem;font-weight:700}
+.qc.pain .qi{background:rgba(255,107,107,.1);color:#ff9a9a}
+.qc.win .qi{background:rgba(0,200,163,.1);color:#7bf2d6}
+.qc.nt .qi{background:rgba(0,182,214,.1);color:#93edff}
+
+.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.08rem;margin-top:2.45rem}
+.mc{padding:1.55rem;transition:transform .24s,border-color .24s}
+.mn{font-family:var(--font-display);font-size:2.55rem;line-height:1;margin-bottom:.4rem}
+.mlb{font-size:.82rem;font-weight:800;margin-bottom:.24rem}
+.ms{font-size:.74rem;color:var(--muted);line-height:1.5}
+.mb{height:2px;border-radius:2px;margin-top:.92rem}
+.g .mn{color:#7af2d5}.g .mb{background:var(--gd)}
+.pu2 .mn{color:#9dedff}.pu2 .mb{background:var(--primary)}
+.re .mn{color:#ffa5a5}.re .mb{background:var(--cr)}
+.am2 .mn{color:#ffd57f}.am2 .mb{background:var(--wn)}
+
+.sb{display:grid;grid-template-columns:1fr 2fr;gap:2rem;padding:2rem;margin-top:2rem;align-items:center}
+.sbn{font-family:var(--font-display);font-size:4.6rem;font-weight:800;color:#7af2d5;line-height:1}
+.sbl{font-size:.77rem;color:var(--muted);margin-top:.25rem}
+.scc{display:flex;flex-direction:column;gap:.7rem}
+.scr{display:flex;align-items:center;gap:1rem}
+.scl{font-size:.78rem;color:var(--txt-dim);width:122px;flex-shrink:0}
+.scbw{flex:1;height:6px;background:rgba(255,255,255,.09);border-radius:4px}
+.scb{height:100%;border-radius:4px}
+.scv{font-size:.78rem;font-weight:800;color:#7af2d5;width:34px;text-align:right;flex-shrink:0}
+
+.tt{width:100%;border-collapse:separate;border-spacing:0;margin-top:2rem;font-size:.82rem;overflow:hidden;border:1px solid var(--bd-soft);border-radius:12px}
+.tt th{background:rgba(0,182,214,.18);color:#9befff;padding:.7rem .95rem;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-align:left}
+.tt td{padding:.74rem .95rem;border-bottom:1px solid var(--bd-soft);color:var(--txt-dim);vertical-align:middle;background:rgba(8,22,44,.45)}
+.tt tr:last-child td{border-bottom:none}
+.tt tr:hover td{background:rgba(0,182,214,.08)}
+.on2{color:#7ef1d5;font-weight:800}.ov{color:#ffcb63;font-weight:800}
+.pill{display:inline-block;padding:.17rem .56rem;border-radius:20px;font-size:.67rem;font-weight:800}
+.pg3{background:rgba(0,200,163,.16);color:#7df2d7}.pa{background:rgba(244,185,74,.16);color:#ffcf6a}
+
+.cr2{display:flex;gap:3rem;margin:2.5rem 0 2rem;flex-wrap:wrap}
+.cN{font-family:var(--font-display);font-size:3.05rem;font-weight:800;line-height:1}
+.cL{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:.24rem}
+.cg{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.cc{padding:1.3rem;transition:transform .24s,border-color .24s}
+.cc h5{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem}
+.cc.met h5{color:#83f3d8}.cc.par h5{color:#ffcc65}.cc.nm h5{color:#ff9e9e}
+.ci{font-size:.75rem;color:var(--txt-dim);padding:.35rem .52rem;border-radius:6px;margin-bottom:.3rem;line-height:1.5}
+.cc.met .ci{background:rgba(0,200,163,.08)}.cc.par .ci{background:rgba(244,185,74,.09)}.cc.nm .ci{background:rgba(255,107,107,.09)}
+
+.ag{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2.5rem}
+.ac{padding:1.4rem;transition:transform .25s,border-color .25s,box-shadow .25s}
+.ap{font-size:.65rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#8feeff;margin-bottom:.28rem}
+.an{font-size:.98rem;font-weight:800;margin-bottom:.55rem}
+.au{font-size:.79rem;color:var(--txt-dim);line-height:1.66;margin-bottom:.8rem}
+.ai2{border-left:2px solid var(--primary);padding:.45rem .7rem;font-size:.73rem;color:#92edff;line-height:1.5;background:rgba(0,182,214,.06)}
+
+.sk{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2.45rem}
+.skc{padding:1.2rem;transition:transform .24s,border-color .24s}
+.ski{font-size:1.4rem;margin-bottom:.54rem}
+.skn{font-size:.88rem;font-weight:800;margin-bottom:.29rem}
+.skd{font-size:.74rem;color:var(--muted);line-height:1.55}
+
+.tw{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:2.45rem}
+.tc{padding:1.55rem;transition:transform .24s,border-color .24s}
+.th{display:flex;align-items:center;gap:.65rem;margin-bottom:.55rem}
+.tn{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:#023243;flex-shrink:0}
+.tc h4{font-size:.9rem;font-weight:800}
+.tc p{font-size:.8rem;color:var(--txt-dim);line-height:1.69}
+
+.dg{display:grid;grid-template-columns:1.4fr 1fr;gap:1.1rem;margin-top:2.15rem}
+.dc{padding:1.2rem}
+.dv{width:100%;aspect-ratio:16/9;border:1px solid var(--bd-soft);border-radius:10px;background:#071126;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.dv iframe,.dv video{width:100%;height:100%;border:none}
+.dt{font-size:.78rem;color:var(--muted);margin-top:.58rem;line-height:1.6}
+.dl{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.76rem}
+
+footer{background:linear-gradient(180deg,#081327,#050c19);border-top:1px solid var(--bd-soft);text-align:center;padding:3.6rem 2rem}
+[data-theme="editorial"] footer{background:linear-gradient(180deg,#eef3f7,#e4ebf3)}
+.fl{font-family:var(--font-display);font-size:1.45rem;font-weight:800;margin-bottom:.4rem}
+.fl span{color:#93ecff}
+footer p{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:.3rem}
+.fls{display:flex;gap:1.5rem;justify-content:center;margin-top:1.25rem;flex-wrap:wrap}
+.fls a{font-size:.8rem;color:var(--txt-dim);text-decoration:none;transition:color .2s}
+.fls a:hover{color:#9df2ff}
+
+.reveal{opacity:0;transform:translateY(28px) scale(.985);transition:opacity .68s ease,transform .68s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}
+.reveal.in{opacity:1;transform:translateY(0) scale(1)}
+
+@media (prefers-reduced-motion: reduce){
+  .pw,.f,body::before,.reveal{animation:none !important;transition:none !important;transform:none !important;opacity:1 !important}
+}
+
+@media (max-width:1040px){
+  .hi,.sgi{grid-template-columns:1fr;gap:2.5rem}
+  .hst{grid-template-columns:repeat(2,minmax(0,1fr));max-width:560px}
+}
+@media (max-width:900px){
+  .pw{width:240px}
+  .sgr,.qg,.mg,.ag{grid-template-columns:1fr 1fr}
+  .sk{grid-template-columns:1fr 1fr}
+  .cg{grid-template-columns:1fr}
+  .pro{grid-template-columns:repeat(3,1fr)}
+  .pro::before{display:none}
+}
+@media (max-width:740px){
+  nav{height:56px}
+  .hero{padding-top:56px;min-height:calc(100vh - 56px)}
+  .nm{display:none}
+  .fb{display:none}
+  .wrap,.nv,.hi{padding-left:1.25rem;padding-right:1.25rem}
+  .nc{display:none}
+  .hi{grid-template-columns:1fr;gap:2rem}
+  h1{font-size:clamp(2rem,4vw,2.8rem)}
+  .hst{grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}
+}
+@media (max-width:640px){
+  .pg2,.bap,.rs,.tw,.dg,.sb{grid-template-columns:1fr}
+  .sgr,.qg,.mg,.ag,.sk{grid-template-columns:1fr}
+  .hst{grid-template-columns:1fr 1fr;gap:.5rem;margin-top:1.4rem}
+  .hn{font-size:1.45rem}
+  section{padding:4rem 0}
+  .hd{font-size:.95rem;margin-bottom:1.6rem}
+  h1{margin-bottom:.8rem}
+  .cN{font-size:2.4rem}
+  .hv{margin-top:2rem}
+  .pw{width:220px}
+}
+
+@keyframes fu{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes drift{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(3%,2%,0)}}
+.f{animation:fu .7s cubic-bezier(.22,1,.36,1) both}
+.d1{animation-delay:.08s}.d2{animation-delay:.2s}.d3{animation-delay:.33s}.d4{animation-delay:.48s}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nv">
+    <a class="nl" href="#">Ekta<span> · UX Design</span></a>
+    <ul class="nm">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#design">Design</a></li>
+      <li><a href="#testing">Testing</a></li>
+      <li><a href="#demo">Demo</a></li>
+      <li><a href="#outcome">Outcome</a></li>
+      <li><a href="#ai">AI Tools</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch visual theme">Switch Theme</button>
+    <a class="nc" href="https://www.figma.com/design/iYNqMMsbTfTA4kZT63NQbU/AI-Assitsted-Ops-App" target="_blank">View Prototype ↗</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hbg" data-depth="0.12"></div><div class="hgrid" data-depth="0.2"></div>
+  <div class="hi">
+    <div>
+      <div class="heb f">UX Case Study · Northeastern University · 2026</div>
+      <h1 class="f d1">The<br><em>Architectural</em><br>Ledger</h1>
+      <p class="hd f d2">An AI-powered operations dashboard that collapses a 5-tool, 40-minute incident workflow into a single guided mobile experience — from alert to action in under 10 minutes.</p>
+      <div class="hbs f d3">
+        <a class="bp" href="https://www.figma.com/design/iYNqMMsbTfTA4kZT63NQbU/AI-Assitsted-Ops-App" target="_blank">View Hi-Fi Prototype ↗</a>
+        <a class="bg" href="https://stitch.withgoogle.com/projects/6795453939671925704" target="_blank">Stitch Prototype ↗</a>
+      </div>
+      <div class="hst f d4">
+        <div><div class="hn">100%</div><div class="hl">Task success</div></div>
+        <div><div class="hn">8.89</div><div class="hl">Usability /10</div></div>
+        <div><div class="hn">4.72</div><div class="hl">Satisfaction /5</div></div>
+        <div><div class="hn">5</div><div class="hl">Participants</div></div>
+      </div>
+    </div>
+    <div class="hv f d2">
+      <div class="pw">
+        <div class="pglow"></div>
+        <div class="pf">
+          <div class="pn"></div>
+          <div class="ps" id="heroPhone">
+            <img id="heroImg" src="screen_dashboard.png" alt="Operations Dashboard"
+              style="width:100%;height:100%;object-fit:cover;object-position:top"
+              onerror="this.style.cssText='width:100%;height:100%;background:linear-gradient(160deg,#2d1b69,#1a0d3e);display:block'">
+          </div>
+        </div>
+        <div class="fb fb1"><div class="fd" style="background:#F43F5E"></div><div><div class="ft">Expenses Alert</div><div class="fs">8% above target</div></div></div>
+        <div class="fb fb2"><div class="fd" style="background:#10B981"></div><div><div class="ft">82% Confidence</div><div class="fs">AI root cause found</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="sec-art a" data-depth="0.3" aria-hidden="true">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img">
+      <defs>
+        <linearGradient id="gradA" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="var(--accent)" stop-opacity="0.3"/>
+        </linearGradient>
+      </defs>
+      <path d="M42 38h102v78c0 29-24 52-52 52s-50-24-50-52z" fill="url(#gradA)"/>
+      <circle cx="112" cy="76" r="19" fill="none" stroke="var(--txt)" stroke-opacity="0.38" stroke-width="6"/>
+    </svg>
+  </div>
+  <div class="wrap">
+    <p class="sl">01 — Problem Statement</p>
+    <h2 class="st">Operations teams lose 40+ minutes<br>per incident to fragmented tools</h2>
+    <p class="ss">Analysts, managers, and engineers juggle dashboards, ticket tools, and chat — critical context lost at every handoff. AI flags are dismissed because no one explains the "why."</p>
+    <div class="pg2">
+      <div class="pc red"><div class="pc-i">⏱</div><h4>15–40 minutes to form a hypothesis</h4><p>Users spend <span class="bigs">60%</span> of investigation time manually verifying across 3+ tools rather than acting on the anomaly.</p></div>
+      <div class="pc am"><div class="pc-i">🔀</div><h4>3–5 tool context-switches per incident</h4><p>Dashboard → Excel → Jira → Slack → wait. Every handoff leaks context. Teams re-solve the same problems repeatedly with no shared decision log.</p></div>
+      <div class="pc am"><div class="pc-i">🤖</div><h4>AI flags exist — but no one trusts them</h4><p>No confidence scores, no cited sources, no "why." Users dismiss AI alerts and verify manually, completely negating any efficiency gains from automation.</p></div>
+      <div class="pc pu"><div class="pc-i">📊</div><h4>20+ metrics, zero visual hierarchy</h4><p>Dense dashboards take 2–5 minutes just to find the first critical signal. "Investigate now" looks identical to "informational" — causing missed anomalies.</p></div>
+    </div>
+    <div class="hmw">
+      <div class="hmwl">Design Challenge</div>
+      <div class="hmwt">How might we design a single AI-powered interface that takes operations teams from alert → investigation → action → report → share in under 10 minutes, without ever leaving the dashboard?</div>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH -->
+<section id="research">
+  <div class="wrap">
+    <p class="sl">02 — User Research</p>
+    <h2 class="st">5 in-depth interviews · finance,<br>ops, engineering & BI roles</h2>
+    <p class="ss">Observational research sessions synthesised with Looppanel AI. Participants used Tableau, QuickSight, Looker, PitchBook, and Excel daily — all frustrated by the same root problems.</p>
+    <div class="pca">
+      <div class="pt">
+        <div class="av">AM</div>
+        <div>
+          <div class="pn2">Alex Mercer — Primary Persona</div>
+          <div class="pr">Mid-level Analyst · Operations / Finance · 26–38 · 2–6 years with metrics tools</div>
+          <div class="tr">
+            <span class="tg">Daily dashboard ritual</span><span class="tg">Tableau + Jira + Slack</span>
+            <span class="tg">Cross-functional team</span><span class="tg">Edits AI summaries</span><span class="tg">Manual verification habit</span>
+          </div>
+        </div>
+      </div>
+      <div class="pq">"AI flags issues fast, but I spend 60% of my time verifying and cross-checking sources. By the time I've assembled the report, I've already forgotten half the context from the original alert."</div>
+    </div>
+    <div class="rs">
+      <div class="rc">
+        <h4>Top Pain Points Identified</h4>
+        <div class="pi">🔴 Context-switching: 3–5 tools per incident, avg 40 min</div>
+        <div class="pi">🔴 Vague AI explanations — no confidence scores or cited sources</div>
+        <div class="pi">🟡 20+ metrics per screen — severe visual overload</div>
+        <div class="pi">🟡 Ticket creation: 10–30 min of manual copy-paste into Jira</div>
+        <div class="pi">🟡 Reports assembled from 3–8 data sources manually</div>
+        <div class="pi">🟠 Unclear metric definitions — requires navigating external docs</div>
+      </div>
+      <div class="rc">
+        <h4>Emotional Journey Map</h4>
+        <div class="jr"><span class="js">Morning Check</span><span class="je en">Neutral → Alert</span></div>
+        <div class="jr"><span class="js">Anomaly Detected</span><span class="je ew">Curious → Uncertain</span></div>
+        <div class="jr"><span class="js">Investigation</span><span class="je eb">Frustrated ← peak pain</span></div>
+        <div class="jr"><span class="js">Ticket Creation</span><span class="je eb">Frustrated → Overloaded</span></div>
+        <div class="jr"><span class="js">Report Assembly</span><span class="je ew">Overloaded</span></div>
+        <div class="jr"><span class="js">Collaboration</span><span class="je eg">Tired → Relieved</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESIGN PROCESS -->
+<section id="design">
+  <div class="wrap">
+    <p class="sl">03 — Design Process</p>
+    <h2 class="st">5 iterations · 23 hi-fi screens ·<br>14 heuristic issues resolved</h2>
+    <p class="ss">A fully research-backed design process with AI tools accelerating output at every stage — without replacing critical design judgment.</p>
+    <div class="pro">
+      <div class="ps2"><div class="pd">1</div><div class="plb">Research</div><div class="psb">5 interviews · Looppanel AI · 51 user needs</div></div>
+      <div class="ps2"><div class="pd">2</div><div class="plb">Define</div><div class="psb">PRD · 55 functional reqs · Task analysis</div></div>
+      <div class="ps2"><div class="pd">3</div><div class="plb">Lo-Fi</div><div class="psb">Stitch AI wireframes · 5 tasks</div></div>
+      <div class="ps2"><div class="pd">4</div><div class="plb">Hi-Fi</div><div class="psb">23 Figma screens · Heuristic eval</div></div>
+      <div class="ps2"><div class="pd">5</div><div class="plb">Test</div><div class="psb">5 moderated sessions · 8.89/10</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROTOTYPE SCREENS -->
+<section class="secbg">
+  <div class="wrap">
+    <div class="sgi">
+      <div>
+        <p class="sl">04 — Prototype Screens</p>
+        <h2 class="st">23 screens across<br>5 core tasks</h2>
+      </div>
+      <p class="ss" style="max-width:380px">Complete end-to-end workflow: KPI monitoring → anomaly investigation → corrective action → report generation → share & collaborate. All captured live from Figma.</p>
+    </div>
+    <div class="sgr">
+
+      <div class="sca">
+        <div class="sim" style="background:#1a0d2e"><img src="screen_dashboard.png" alt="Operations Dashboard — main KPI monitoring view" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><img src=&quot;https://i.imgur.com/placeholder.png&quot; style=&quot;display:none&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Operations Dashboard<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_dashboard.png here</small></div></div>'"></div>
+        <div class="sinf"><div class="stk">Task 1 — Monitor KPIs</div><div class="snm">Operations Dashboard</div><div class="sds">Expandable KPI list · Expenses critical alert · AI efficiency insight card · Color-coded status</div></div>
+      </div>
+
+      <div class="sca">
+        <div class="sim" style="background:#0d0d1a"><img src="screen_alert.png" alt="Customer Satisfaction Alert modal" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Alert Modal<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_alert.png here</small></div></div>'"></div>
+        <div class="sinf"><div class="stk">Task 1 — Alert Detection</div><div class="snm">AI-Triggered Alert</div><div class="sds">Customer Satisfaction alert · Clear anomaly description · Detection timestamp · One-tap Investigate CTA</div></div>
+      </div>
+
+      <div class="sca">
+        <div class="sim" style="background:#1a0a12"><img src="screen_success.png" alt="Ticket Created Success" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Ticket Success<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_success.png here</small></div></div>'"></div>
+        <div class="sinf"><div class="stk">Task 3 — Ticket Workflow</div><div class="snm">Ticket Created Success</div><div class="sds">Confirmation state after corrective action · clear completion signal · prevents uncertainty after submitting ticket</div></div>
+      </div>
+
+      <div class="sca">
+        <div class="sim" style="background:#0f0d1f"><img src="screen_investigation.png" alt="Investigation Guide Step 2" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Investigation Guide<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_investigation.png here</small></div></div>'"></div>
+        <div class="sinf"><div class="stk">Task 2 — Investigate Anomaly</div><div class="snm">Investigation Guide: Step 2</div><div class="sds">5-step guided flow · AI identifies anomaly start: March 15 2:34 PM · Auto-fills date range</div></div>
+      </div>
+
+      <div class="sca">
+        <div class="sim" style="background:#0d1a0d"><img src="screen_recommended.png" alt="Recommended Actions — 82% confidence" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Recommended Actions<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_recommended.png here</small></div></div>'"></div>
+        <div class="sinf"><div class="stk">Task 2 — AI Confidence</div><div class="snm">Recommended Actions</div><div class="sds">82% investigation confidence · Suggested interventions · Estimated impact (+5% satisfaction) shown</div></div>
+      </div>
+
+      <div class="sca">
+        <div class="sim" style="background:#0d0d1a"><img src="screen_ticket.png" alt="Create Corrective Action Ticket" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Create Ticket<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_ticket.png here</small></div></div>'"></div>
+        <div class="sinf"><div class="stk">Task 3 — Corrective Action</div><div class="snm">Create Action Ticket</div><div class="sds">Auto-populated title + description from investigation · Evidence bundle · Priority field · Avg 2.7 min</div></div>
+      </div>
+
+      <div class="sca">
+        <div class="sim" style="background:#1a0d0d"><img src="screen_report.png" alt="Generate Report modal" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Generate Report<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_report.png here</small></div></div>'"></div>
+        <div class="sinf"><div class="stk">Task 4 — Generate Report</div><div class="snm">Generate Report</div><div class="sds">Template selection · AI-generated summary inline · Generate & Preview enforces review · Rated 5/5</div></div>
+      </div>
+
+      <div class="sca">
+        <div class="sim" style="background:#0d1a12"><img src="screen_share.png" alt="Share Investigation Findings" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Share Findings<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_share.png here</small></div></div>'"></div>
+        <div class="sinf"><div class="stk">Task 5 — Share & Collaborate</div><div class="snm">Share Findings</div><div class="sds">One-tap share to Slack, Teams, Email, Jira · Auto-generated summary card · Editable root cause</div></div>
+      </div>
+
+      <div class="sca">
+        <div class="sim" style="background:#1a0d2e"><img src="screen_success.png" alt="Ticket Created Success" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Ticket Success<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_success.png here</small></div></div>'"></div>
+        <div class="sinf"><div class="stk">Task 3 — Confirmation</div><div class="snm">Ticket Created Success</div><div class="sds">Completion feedback screen validates submission · provides confidence before moving to reporting and sharing</div></div>
+      </div>
+
+    </div>
+    <div style="text-align:center;margin-top:2.25rem">
+      <a class="bp" href="https://www.figma.com/design/iYNqMMsbTfTA4kZT63NQbU/AI-Assitsted-Ops-App" target="_blank" style="display:inline-flex">Explore all 23 screens in Figma ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE / AFTER -->
+<section>
+  <div class="wrap">
+    <p class="sl">05 — Design Decisions</p>
+    <h2 class="st">Before & after — issues found,<br>evidence gathered, redesigned</h2>
+    <p class="ss">Issues surfaced by Claude + Figma MCP heuristic evaluation and confirmed in live usability sessions. Each became a Stitch AI redesign prompt.</p>
+    <div style="margin-top:2.75rem">
+
+      <div class="bap">
+        <div class="bac before">
+          <div class="bat">Before — H-09 · P0 Critical · Broken Dropdown</div>
+          <div class="bai">
+            <img src="screen_ticket.png" alt="ticket before" onerror="this.parentElement.style.cssText='height:190px;display:flex;align-items:center;justify-content:center;background:var(--night3)';this.parentElement.innerHTML='<div class=&quot;mock&quot;><div class=&quot;mla&quot;>Priority</div><div class=&quot;mbr&quot;>e igh ▾</div><div style=&quot;height:6px&quot;></div><div class=&quot;mf&quot;></div><div class=&quot;mf&quot; style=&quot;width:70%&quot;></div></div>'">
+          </div>
+          <div class="bab"><h4>"e igh" — text layer overflow rendering bug</h4><p>The ticket priority dropdown was completely broken — displaying "e igh" due to text overflow. The most critical field in ticket creation was unusable. Found by Claude MCP evaluating node 277:1089.</p></div>
+        </div>
+        <div class="bac after">
+          <div class="bat">After — Pill Button Group Selector</div>
+          <div class="bai" style="display:flex;align-items:center;justify-content:center;background:var(--night3)">
+            <div class="mock">
+              <div class="mla">Priority</div>
+              <div class="mps"><div class="mp">Crit</div><div class="mp on">High</div><div class="mp">Med</div><div class="mp">Low</div></div>
+              <div style="height:8px"></div><div class="mf"></div><div class="mf" style="width:70%"></div>
+            </div>
+          </div>
+          <div class="bab"><h4>4 pills: Critical / High / Medium / Low</h4><p>Selected state filled purple, others outlined. Pre-populated from alert severity detected during investigation. Instant visual confirmation — no ambiguity about what was selected.</p></div>
+        </div>
+      </div>
+
+      <div class="bap">
+        <div class="bac before">
+          <div class="bat">Before — H-12 · P1 High · Report Flow</div>
+          <div class="bai" style="display:flex;align-items:center;justify-content:center;background:var(--night3)">
+            <div class="mock" style="width:200px">
+              <div style="height:32px;background:#1a1a1a;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:rgba(255,255,255,.8);margin-bottom:.4rem">GENERATE &amp; SEND REPORT</div>
+              <div style="height:26px;border:1px solid var(--bd);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:var(--muted)">CANCEL</div>
+            </div>
+          </div>
+          <div class="bab"><h4>Single button — immediate send, no review</h4><p>Clicking "Generate & Send" dispatched the report instantly. PRD required a mandatory preview. Violated heuristic H5 (Error Prevention) — AI errors could be sent directly to stakeholders.</p></div>
+        </div>
+        <div class="bac after">
+          <div class="bat">After — Generate → Preview → Send</div>
+          <div class="bai"><img src="screen_report.png" alt="report after" onerror="this.parentElement.style.cssText='height:190px;display:flex;align-items:center;justify-content:center;background:var(--night3)';this.parentElement.innerHTML='<div class=&quot;mock&quot; style=&quot;width:200px&quot;><div style=&quot;height:28px;background:rgba(124,58,237,.25);border-radius:5px;border:1px solid rgba(124,58,237,.4);display:flex;align-items:center;justify-content:center;font-size:.62rem;color:#c4b5fd;margin-bottom:.35rem&quot;>GENERATE &amp; PREVIEW REPORT</div><div style=&quot;height:28px;background:#1a1a1a;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.62rem;color:rgba(255,255,255,.8);margin-bottom:.35rem&quot;>SEND REPORT</div><div style=&quot;height:24px;border:1px solid var(--bd);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.62rem;color:var(--muted)&quot;>CANCEL</div></div>'"></div>
+          <div class="bab"><h4>3-step enforced flow with mandatory preview</h4><p>Helper text added: "You'll review before it's sent." The Generate Report screen (277:1756) confirmed this redesign. All 5 usability test participants rated the preview step 5/5 satisfaction.</p></div>
+        </div>
+      </div>
+
+      <div class="bap">
+        <div class="bac before">
+          <div class="bat">Before — U-03 · Testing Found · Root Cause Hidden</div>
+          <div class="bai" style="display:flex;align-items:center;justify-content:center;background:var(--night3)">
+            <div style="text-align:center">
+              <div style="font-size:.62rem;color:var(--muted);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.08em">Investigation Confidence</div>
+              <div style="width:56px;height:56px;border-radius:50%;border:3px solid rgba(124,58,237,.4);display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;color:var(--pl);margin:0 auto .65rem">82%</div>
+              <div style="font-size:.62rem;color:var(--muted)">↓ jumps to interventions</div>
+              <div style="font-size:.62rem;color:var(--cr);margin-top:.25rem">root cause? 2 screens away</div>
+            </div>
+          </div>
+          <div class="bab"><h4>Causality analysis buried — 3 of 5 users never found it</h4><p>Investigation jumped from confidence score directly to suggested interventions. P3 (Manny) rated root cause clarity 1/5 and said the flow "jumped from step 2 to step 5." The lowest satisfaction score: 3.80/5 for AI trust.</p></div>
+        </div>
+        <div class="bac after">
+          <div class="bat">After — Root Cause as Mandatory Step 3</div>
+          <div class="bai"><img src="screen_investigation.png" alt="investigation after" onerror="this.parentElement.style.cssText='height:190px;display:flex;align-items:center;justify-content:center;background:var(--night3)';this.parentElement.innerHTML='<div class=&quot;mock&quot; style=&quot;width:200px&quot;><div style=&quot;font-size:.58rem;font-weight:800;color:var(--pl);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.3rem&quot;>Step 3 of 5 — Root Cause</div><div style=&quot;border-left:2px solid var(--p);padding:.35rem .55rem;background:rgba(124,58,237,.1);border-radius:0 4px 4px 0;font-size:.62rem;color:rgba(255,255,255,.8);line-height:1.5&quot;>Primary driver: Delivery delays → satisfaction drop. Correlation: 92%</div><div style=&quot;height:6px&quot;></div><div style=&quot;height:26px;background:rgba(124,58,237,.75);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.62rem;color:#fff&quot;>NEXT STEP →</div></div>'"></div>
+          <div class="bab"><h4>Step 3 in guided flow — impossible to skip</h4><p>Causality analysis promoted to Step 3 with bold "ROOT CAUSE" header and left accent border. Mandatory in the flow. Expected to raise AI trust score from 3.80/5 → 4.3+ in the next test cycle.</p></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- USABILITY TESTING -->
+<section id="testing">
+  <div class="sec-art b" data-depth="0.38" aria-hidden="true">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img">
+      <defs>
+        <linearGradient id="gradB" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="var(--secondary)" stop-opacity="0.65"/>
+          <stop offset="100%" stop-color="var(--primary)" stop-opacity="0.25"/>
+        </linearGradient>
+      </defs>
+      <rect x="26" y="38" width="148" height="124" rx="24" fill="url(#gradB)"/>
+      <path d="M56 125c18-34 30-50 47-50 16 0 22 12 40 43" fill="none" stroke="var(--txt)" stroke-opacity="0.35" stroke-width="8" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="wrap">
+    <p class="sl">06 — Usability Testing</p>
+    <h2 class="st">5 moderated sessions · 25 tasks ·<br>think-aloud · Zoom + Otter.ai</h2>
+    <p class="ss">Remote moderated sessions with representative users from operations, finance, and engineering. Zoom recordings, Otter.ai transcripts, and post-session surveys.</p>
+
+    <table class="tt">
+      <thead>
+        <tr><th>Task</th><th>Target</th><th>Avg Time</th><th>Errors</th><th>Success</th><th>Satisfaction</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>T1</strong> · Monitor KPIs</td><td>2 min</td><td class="ov">3.98 min</td><td>1</td><td><span class="pill pg3">100%</span></td><td>5.0 / 5</td><td><span class="pill pa">Over target</span></td></tr>
+        <tr><td><strong>T2</strong> · Investigate Anomaly</td><td>8 min</td><td class="on2">4.68 min</td><td>2</td><td><span class="pill pg3">100%</span></td><td>4.6 / 5</td><td><span class="pill pg3">Within target</span></td></tr>
+        <tr><td><strong>T3</strong> · Corrective Action</td><td>5 min</td><td class="on2">2.70 min</td><td>2</td><td><span class="pill pg3">100%</span></td><td>4.8 / 5</td><td><span class="pill pg3">Within target</span></td></tr>
+        <tr><td><strong>T4</strong> · Share Findings</td><td>3 min</td><td class="ov">4.94 min</td><td>2</td><td><span class="pill pg3">100%</span></td><td>4.4 / 5</td><td><span class="pill pa">P4 outlier: 13.5 min</span></td></tr>
+        <tr><td><strong>T5</strong> · Generate Report</td><td>4 min</td><td class="on2">3.90 min</td><td>0</td><td><span class="pill pg3">100%</span></td><td>5.0 / 5</td><td><span class="pill pg3">Within target</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.45rem;margin:3.5rem 0 .4rem">Verbatim Feedback — Direct from Transcripts</h3>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:0">Each quote directly triggered a redesign decision. Extracted from Otter.ai session transcripts.</p>
+    <div class="qg">
+      <div class="qc pain"><div class="qt">"I'm not sure what's going on here, because we somehow jumped from step two to step five."</div><div class="qw"><div class="qdot"></div><span class="qn">Manny · Senior Developer</span><span class="qtsk"> · Task 2</span></div><div class="qi">→ Redesign U-04: Step counter fixed to 5 consistent steps</div></div>
+      <div class="qc pain"><div class="qt">"Even though satisfaction was labeled in red, it still had a tick mark — I didn't know if I needed to give it attention."</div><div class="qw"><div class="qdot"></div><span class="qn">Abhishek · Developer</span><span class="qtsk"> · Task 1</span></div><div class="qi">→ Redesign U-01: Tick replaced with warning icon on alert KPIs</div></div>
+      <div class="qc pain"><div class="qt">"There's no feedback loop — I can't confirm sharing even finished. I have to give that a one, unfortunately."</div><div class="qw"><div class="qdot"></div><span class="qn">Manny · Senior Developer</span><span class="qtsk"> · Task 4</span></div><div class="qi">→ Redesign U-07: Post-sharing confirmation screen added</div></div>
+      <div class="qc win"><div class="qt">"I didn't have to go to five different data points — that first click showed me exactly what led to the anomaly."</div><div class="qw"><div class="qdot"></div><span class="qn">Savin · Senior Manager</span><span class="qtsk"> · Task 1</span></div><div class="qi">✓ Validates core alerting mechanism design</div></div>
+      <div class="qc win"><div class="qt">"Information is enough and not cluttered — that was the best part of this whole UX experience."</div><div class="qw"><div class="qdot"></div><span class="qn">Priyanshu · Senior Developer</span><span class="qtsk"> · Overall</span></div><div class="qi">✓ Validates information architecture throughout</div></div>
+      <div class="qc nt"><div class="qt">"It gave me a preview of what would be sent — I had confidence the right content was going to my team."</div><div class="qw"><div class="qdot"></div><span class="qn">Abhishek · Developer</span><span class="qtsk"> · Task 5</span></div><div class="qi">Report preview step rated 5/5 by all 5 participants</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION OVERVIEW / DEMO -->
+<section id="demo">
+  <div class="wrap">
+    <p class="sl">07 — Solution Overview / Demo</p>
+    <h2 class="st">Final product walkthrough +<br>live prototype access</h2>
+    <p class="ss">This section provides a quick demo path for reviewers: watch the flow and open the interactive prototype. Text snippets from real usability sessions are documented in the testing section above.</p>
+
+    <div class="dg">
+      <div class="dc">
+        <div class="dv">
+          <video controls preload="metadata" poster="screen_dashboard.png">
+            <source src="demo.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="dt">Optional: add <strong>demo.mp4</strong> in the same folder to show a full walkthrough (alert → investigation → ticket → report → share). If no video is uploaded, reviewers can still use the prototype links.</p>
+      </div>
+
+      <div class="dc">
+        <h4 style="font-size:.9rem;font-weight:700;margin-bottom:.35rem">Live prototype links</h4>
+        <p class="dt" style="margin-top:0">Use these links in your submission as the "Solution Overview / Demo" evidence.</p>
+        <div class="dl">
+          <a class="bp" href="https://www.figma.com/design/iYNqMMsbTfTA4kZT63NQbU/AI-Assitsted-Ops-App" target="_blank">Figma Hi-Fi ↗</a>
+          <a class="bg" href="https://stitch.withgoogle.com/projects/6795453939671925704" target="_blank">Stitch Prototype ↗</a>
+        </div>
+        <p class="dt">Deliverable note: this case study already includes verbatim usability feedback snippets, quantitative outcomes, and AI-tool reflections required by the assignment rubric.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOME -->
+<section id="outcome">
+  <div class="sec-art c" data-depth="0.34" aria-hidden="true">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img">
+      <defs>
+        <linearGradient id="gradC" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.82"/>
+          <stop offset="100%" stop-color="var(--primary)" stop-opacity="0.35"/>
+        </linearGradient>
+      </defs>
+      <polygon points="100,20 174,66 174,134 100,180 26,134 26,66" fill="url(#gradC)"/>
+      <polyline points="66,112 90,134 136,80" fill="none" stroke="var(--txt)" stroke-opacity="0.45" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="wrap">
+    <p class="sl">08 — Outcome & Impact</p>
+    <h2 class="st">8.89/10 · 100% task success ·<br>all 5 would use this in real work</h2>
+    <p class="ss">Exceeds the 7.0/10 target. Zero failures across 25 tasks and 5 participants. The core product goal — from alert to action without leaving the app — was validated.</p>
+
+    <div class="sb">
+      <div><div class="sbn">8.89</div><div class="sbl">Usability Score /10<br>Target was 7.0 / 10</div></div>
+      <div class="scc">
+        <div class="scr"><div class="scl">Task Success (40%)</div><div class="scbw"><div class="scb" style="width:100%;background:var(--gd)"></div></div><div class="scv">4.00</div></div>
+        <div class="scr"><div class="scl">Efficiency (20%)</div><div class="scbw"><div class="scb" style="width:75%;background:var(--wn)"></div></div><div class="scv">1.50</div></div>
+        <div class="scr"><div class="scl">Error Rate (20%)</div><div class="scbw"><div class="scb" style="width:75%;background:var(--gd)"></div></div><div class="scv">1.50</div></div>
+        <div class="scr"><div class="scl">Satisfaction (20%)</div><div class="scbw"><div class="scb" style="width:94.5%;background:var(--p)"></div></div><div class="scv">1.89</div></div>
+      </div>
+    </div>
+
+    <div class="mg">
+      <div class="mc g"><div class="mn">100%</div><div class="mlb">Task success rate</div><div class="ms">25/25 tasks completed across all participants</div><div class="mb" style="width:100%"></div></div>
+      <div class="mc g"><div class="mn">4.72</div><div class="mlb">Avg satisfaction /5</div><div class="ms">Across 22 Likert items and 7 survey categories</div><div class="mb" style="width:94%"></div></div>
+      <div class="mc re"><div class="mn">3.80</div><div class="mlb">Lowest: AI trust /5</div><div class="ms">3/5 participants wanted formula breakdown for confidence score</div><div class="mb" style="width:76%"></div></div>
+      <div class="mc am2"><div class="mn">0.28</div><div class="mlb">Avg errors / task</div><div class="ms">Well below 1.0 threshold · T5 Report had zero errors</div><div class="mb" style="width:28%"></div></div>
+      <div class="mc pu2"><div class="mn">13.5</div><div class="mlb">P4 Task 4 outlier (min)</div><div class="ms">4.5× over 3-min target · Missing post-share confirmation → critical redesign</div><div class="mb" style="width:82%"></div></div>
+      <div class="mc g"><div class="mn">5/5</div><div class="mlb">Would use in real work</div><div class="ms">All participants confirmed intent to adopt in their professional workflow</div><div class="mb" style="width:100%"></div></div>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin:3rem 0 1.5rem">UX Requirements Compliance — 20 Requirements Evaluated</h3>
+    <div class="cr2">
+      <div><div class="cN" style="color:var(--gd)">12</div><div class="cL">Met</div></div>
+      <div><div class="cN" style="color:var(--wn)">6</div><div class="cL">Partially Met</div></div>
+      <div><div class="cN" style="color:var(--cr)">2</div><div class="cL">Not Met</div></div>
+      <div><div class="cN" style="color:var(--body)">20</div><div class="cL">Total</div></div>
+    </div>
+    <div class="cg">
+      <div class="cc met"><h5>✓ Met (12)</h5>
+        <div class="ci">KPI status visible within 3 seconds</div>
+        <div class="ci">One-tap Jira / Slack / Teams sharing</div>
+        <div class="ci">AI confidence score displayed</div>
+        <div class="ci">Auto-populated ticket from investigation</div>
+        <div class="ci">Report preview before send enforced</div>
+        <div class="ci">5-step guided investigation flow</div>
+      </div>
+      <div class="cc par"><h5>◑ Partially Met (6)</h5>
+        <div class="ci">Mode discoverability (Basic/Advanced)</div>
+        <div class="ci">AI confidence formula breakdown</div>
+        <div class="ci">Assignee rationale in ticket</div>
+        <div class="ci">Post-alert navigation clarity</div>
+        <div class="ci">Metric glossary reachability</div>
+        <div class="ci">Filter label legibility</div>
+      </div>
+      <div class="cc nm"><h5>✗ Not Met (2)</h5>
+        <div class="ci">Root cause surfaced before interventions</div>
+        <div class="ci">Post-sharing confirmation feedback</div>
+        <div style="margin-top:.75rem;font-size:.7rem;color:var(--cr);border-top:1px solid rgba(244,63,94,.18);padding-top:.7rem">Both have redesign fixes + Stitch AI prompts written for next iteration</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI TOOLS -->
+<section id="ai">
+  <div class="wrap">
+    <p class="sl">09 — AI Tools Throughout</p>
+    <h2 class="st">6 AI tools · every phase ·<br>~20 hours of workflow accelerated</h2>
+    <p class="ss">End-to-end experiment in AI-assisted UX. Each tool served a specific, deliberate role — AI accelerated without replacing critical design judgment.</p>
+    <div class="ag">
+      <div class="ac"><div class="ap">Research Phase</div><div class="an">Looppanel</div><div class="au">Auto-coded 5 interview transcripts into themes, pain points, and user needs. Generated persona inputs and affinity cluster summaries from observational research.</div><div class="ai2">Cut 8+ hrs of qualitative coding to ~45 min. Surfaced "context-switching" as the #1 dominant theme across all 5 users.</div></div>
+      <div class="ac"><div class="ap">Lo-Fi + Hi-Fi Prototype</div><div class="an">Stitch AI</div><div class="au">Screen-by-screen generation for all 23 hi-fi screens using a Master Prompt design system + per-screen detail prompts. 8 redesign iteration cycles.</div><div class="ai2">Vague prompts → generic screens. Specific prompts naming exact screen IDs and component states → production-quality UI. Prompting is a design skill.</div></div>
+      <div class="ac"><div class="ap">Heuristic Evaluation</div><div class="an">Claude + Figma MCP</div><div class="au">Reviewed all 23 screens via get_screenshot + get_design_context on each node. Evaluated against Nielsen's 10 heuristics with PRD attached for full context.</div><div class="ai2">Found cross-screen inconsistencies impossible to spot manually. The "oira→Jira" label bug (H-14) and contradictory report flows (H-12) required full-file context.</div></div>
+      <div class="ac"><div class="ap">Usability Testing</div><div class="an">Otter.ai</div><div class="au">Auto-transcription of 5 Zoom sessions (40–65 min each). AI chat used to extract confusion moments, success quotes, and issues by task number.</div><div class="ai2">Surfaced Manny's root cause complaint and Abhishek's tick mark ambiguity within minutes of session end. Both became high-severity redesign items.</div></div>
+      <div style="margin:1.5rem 0;text-align:center"><img src="Ekkta.github.io/website_images/otterai.png" alt="Otter.ai Transcript Analysis" style="border-radius:12px;border:1px solid var(--bd);max-width:100%;height:auto;max-height:280px"></div>
+      <div class="ac"><div class="ap">Analysis + Data</div><div class="an">ChatGPT</div><div class="au">Structured real-time metric entry during sessions. Usability score calculation. Gap analysis comparing test results against PRD UX requirements.</div><div class="ai2">Flagged P4 Task 4 as 4.5× statistical outlier (13.5 min vs 3-min target) during analysis — immediately directing focus to the sharing confirmation gap.</div></div>
+      <div class="ac"><div class="ap">Data Visualization</div><div class="an">Julius AI</div><div class="au">4 publication-quality charts from usability data: task time comparison, satisfaction by category, error distribution, usability score breakdown donut.</div><div class="ai2">Generated charts matching exact brand colors and report formatting. Reduced chart production from ~2 hrs to 15 min per chart set.</div></div>
+    </div>
+    <div style="margin:2.5rem 0 2rem">
+      <h5 style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem;text-align:center">Generated Charts — Julius AI</h5>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem">
+        <img src="Ekkta.github.io/website_images/avgtask.png" alt="Average Task Time Comparison" style="border-radius:12px;border:1px solid var(--bd);width:100%;height:auto">
+        <img src="Ekkta.github.io/website_images/errordistribution.png" alt="Error Distribution Chart" style="border-radius:12px;border:1px solid var(--bd);width:100%;height:auto">
+        <img src="Ekkta.github.io/website_images/satisfaction.png" alt="Satisfaction by Category" style="border-radius:12px;border:1px solid var(--bd);width:100%;height:auto">
+        <img src="Ekkta.github.io/website_images/usabilityscore.png" alt="Usability Score Breakdown" style="border-radius:12px;border:1px solid var(--bd);width:100%;height:auto">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:1.75rem">
+      <div style="background:var(--night2);border:1px solid var(--bd);border-radius:var(--r);padding:1.4rem">
+        <h5 style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gd);margin-bottom:.85rem">AI Excelled At</h5>
+        <div style="font-size:.8rem;color:var(--body);line-height:1.78">Cross-screen consistency · Text truncation bugs · PRD-to-prototype gap analysis · Quantitative metric calculation · Qualitative research synthesis · Rapid screen generation from precise prompts</div>
+      </div>
+      <div style="background:var(--night2);border:1px solid var(--bd);border-radius:var(--r);padding:1.4rem">
+        <h5 style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--cr);margin-bottom:.85rem">Required Human Judgment</h5>
+        <div style="font-size:.8rem;color:var(--body);line-height:1.78">Interaction consequences after tap · Accidental action risk · Missing feedback states · Emotional resonance of design choices · Knowing when a "fix" changes intent · Participant rapport during sessions</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skbg">
+  <div class="wrap">
+    <p class="sl">10 — Skills Demonstrated</p>
+    <h2 class="st">End-to-end UX practice across<br>research, design & validation</h2>
+    <div class="sk">
+      <div class="skc"><div class="ski">🔍</div><div class="skn">User Research</div><div class="skd">Moderated interviews, observational sessions, Looppanel AI synthesis, persona development, journey mapping</div></div>
+      <div class="skc"><div class="ski">📋</div><div class="skn">Requirements Definition</div><div class="skd">55 functional + 42 UI requirements, full traceability from user need → PRD → prototype screen</div></div>
+      <div class="skc"><div class="ski">✏️</div><div class="skn">Wireframing & Prototyping</div><div class="skd">Lo-fi in Stitch AI, hi-fi in Figma, mobile-first design, 23 screens across 5 tasks</div></div>
+      <div class="skc"><div class="ski">🎨</div><div class="skn">Visual & Interaction Design</div><div class="skd">Design system with color tokens, Slack-inspired palette, consistent component library</div></div>
+      <div class="skc"><div class="ski">🔬</div><div class="skn">Heuristic Evaluation</div><div class="skd">Nielsen's 10 heuristics, 14 issues (P0–P3), AI-assisted full-prototype eval via Figma MCP</div></div>
+      <div class="skc"><div class="ski">🧪</div><div class="skn">Summative Usability Testing</div><div class="skd">5 moderated remote sessions, think-aloud protocol, quantitative scoring, outlier analysis</div></div>
+      <div class="skc"><div class="ski">📊</div><div class="skn">Quantitative UX Analysis</div><div class="skd">Weighted usability scoring, task metrics, Likert scales, UX requirements compliance tracking</div></div>
+      <div class="skc"><div class="ski">🤖</div><div class="skn">AI-Augmented Design</div><div class="skd">6 AI tools across full lifecycle — research, prototyping, evaluation, testing, visualization</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TAKEAWAYS -->
+<section>
+  <div class="wrap">
+    <p class="sl">11 — Key Takeaways</p>
+    <h2 class="st">What designing an AI product<br>with AI tools taught me</h2>
+    <div class="tw">
+      <div class="tc"><div class="th"><div class="tn">1</div><h4>AI evaluation + self-assessment are complementary</h4></div><p>AI caught visual and structural issues in minutes. Self-assessment caught interaction consequences — the accidental dismiss, the missing confirmation state. Neither alone was sufficient. The combination was the method.</p></div>
+      <div class="tc"><div class="th"><div class="tn">2</div><h4>Transparency is the prerequisite for AI trust</h4></div><p>The lowest score (3.80/5) was "Trusted AI confidence score." Users weren't distrusting AI — they wanted to understand it. Showing the formula and cited sources mattered more than the number itself.</p></div>
+      <div class="tc"><div class="th"><div class="tn">3</div><h4>One outlier tells the most important story</h4></div><p>P4's 13.5-min Task 4 looked like statistical noise. But the Otter.ai transcript revealed the most critical design gap: zero post-sharing feedback. Qual + quant together — never either alone.</p></div>
+      <div class="tc"><div class="th"><div class="tn">4</div><h4>The PRD is your north star — keep returning</h4></div><p>Both "Not Met" requirements were in the PRD from day one. They only surfaced under real usability test conditions — not expert heuristic evaluation. Real users navigating under task pressure exposed what expert review missed.</p></div>
+      <div class="tc"><div class="th"><div class="tn">5</div><h4>Precise prompts produce precise outputs</h4></div><p>Vague Stitch AI prompts produced generic screens. Prompts that named specific Figma screen IDs, listed exact component states, and referenced PRD requirements produced production-quality UI. Prompting is a design discipline.</p></div>
+      <div class="tc"><div class="th"><div class="tn">6</div><h4>Every research hour compounds forward</h4></div><p>The 51 user needs from research shaped 55 PRD requirements, which shaped 23 screens, which were tested and validated. The quality of the final product was determined in the first two weeks of user research.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fl">Ekta <span>· UX Design</span></div>
+  <p>Northeastern University · Master of Science in Information Systems · Spring 2026</p>
+  <p>The Architectural Ledger — AI-Assisted Operations Dashboard</p>
+  <div class="fls">
+    <a href="https://www.figma.com/design/iYNqMMsbTfTA4kZT63NQbU/AI-Assitsted-Ops-App" target="_blank">Figma Hi-Fi Prototype ↗</a>
+    <a href="https://stitch.withgoogle.com/projects/6795453939671925704" target="_blank">Stitch AI Prototype ↗</a>
+    <a href="https://app.looppanel.com/summary/tduVsnltbQnVttAeXxrB" target="_blank">Looppanel Research ↗</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var btn = document.getElementById('themeToggle');
+  var storedTheme = localStorage.getItem('ux-theme');
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (storedTheme === 'editorial') {
+    root.setAttribute('data-theme', 'editorial');
+  } else {
+    root.setAttribute('data-theme', 'neon');
+  }
+
+  function syncThemeLabel() {
+    if (!btn) return;
+    var isEditorial = root.getAttribute('data-theme') === 'editorial';
+    btn.textContent = isEditorial ? 'Neon Theme' : 'Editorial Theme';
+    btn.setAttribute('aria-label', isEditorial ? 'Switch to neon theme' : 'Switch to editorial theme');
+  }
+
+  function toggleTheme() {
+    var isEditorial = root.getAttribute('data-theme') === 'editorial';
+    if (isEditorial) {
+      root.setAttribute('data-theme', 'neon');
+      localStorage.setItem('ux-theme', 'neon');
+    } else {
+      root.setAttribute('data-theme', 'editorial');
+      localStorage.setItem('ux-theme', 'editorial');
+    }
+    syncThemeLabel();
+  }
+
+  if (btn) {
+    syncThemeLabel();
+    btn.addEventListener('click', toggleTheme);
+  }
+
+  var selectors = [
+    '.pg2 .pc', '.pca', '.rs .rc', '.pro .ps2', '.sgr .sca', '.bap .bac', '.qg .qc',
+    '.tt', '.sb', '.mg .mc', '.cg .cc', '.ag .ac', '.sk .skc', '.tw .tc', '.dg .dc', '.fls a'
+  ];
+  var revealNodes = document.querySelectorAll(selectors.join(','));
+  revealNodes.forEach(function (node) {
+    node.classList.add('reveal');
+  });
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+    revealNodes.forEach(function (node, index) {
+      node.style.transitionDelay = (Math.min(index % 8, 5) * 45) + 'ms';
+      observer.observe(node);
+    });
+  } else {
+    revealNodes.forEach(function (node) { node.classList.add('in'); });
+  }
+
+  if (!prefersReduced) {
+    var parallaxNodes = document.querySelectorAll('[data-depth]');
+    var ticking = false;
+
+    function updateParallax() {
+      var y = window.scrollY || window.pageYOffset;
+      parallaxNodes.forEach(function (node) {
+        var depth = parseFloat(node.getAttribute('data-depth')) || 0.2;
+        var move = -(y * depth * 0.08);
+        node.style.transform = 'translate3d(0,' + move.toFixed(2) + 'px,0)';
+      });
+      ticking = false;
+    }
+
+    function requestParallax() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(updateParallax);
+    }
+
+    updateParallax();
+    window.addEventListener('scroll', requestParallax, { passive: true });
+  }
+})();
+</script>
+
+</body>
+</html>
