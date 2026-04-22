@@ -215,12 +215,12 @@ h1 em{font-style:normal;color:var(--pl)}
 .snm{font-size:.9rem;font-weight:800;margin-bottom:.23rem}
 .sds{font-size:.74rem;color:var(--muted);line-height:1.5}
 
-.bap{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-bottom:1.72rem}
+.bap{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-bottom:1.72rem;max-width:100%;margin-left:auto;margin-right:auto}
 .bac{overflow:hidden}
 .bat{padding:.55rem 1rem;font-size:.67rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
 .bac.before .bat{background:rgba(255,107,107,.12);color:#ff9b9b;border-bottom:1px solid rgba(255,107,107,.3)}
 .bac.after .bat{background:rgba(0,200,163,.11);color:#82f4d9;border-bottom:1px solid rgba(0,200,163,.35)}
-.bai{height:190px;overflow:hidden;background:#0a1a34;display:flex;align-items:center;justify-content:center}
+.bai{height:280px;overflow:hidden;background:#0a1a34;display:flex;align-items:center;justify-content:center}
 .bai img{width:100%;height:100%;object-fit:cover;object-position:top}
 .bab{padding:1.1rem;background:transparent}
 .bab h4{font-size:.86rem;font-weight:800;margin-bottom:.38rem}
@@ -385,6 +385,7 @@ footer p{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:.3rem}
       <li><a href="#problem">Problem</a></li>
       <li><a href="#research">Research</a></li>
       <li><a href="#design">Design</a></li>
+      <li><a href="#decisions">Decisions</a></li>
       <li><a href="#testing">Testing</a></li>
       <li><a href="#demo">Demo</a></li>
       <li><a href="#outcome">Outcome</a></li>
@@ -538,51 +539,31 @@ footer p{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:.3rem}
       </div>
       <p class="ss" style="max-width:380px">Complete end-to-end workflow: KPI monitoring → anomaly investigation → corrective action → report generation → share & collaborate. All captured live from Figma.</p>
     </div>
-    <div class="sgr">
+    <div class="sgr" style="display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-top:2.8rem">
 
       <div class="sca">
-        <div class="sim" style="background:#1a0d2e"><img src="screen_dashboard.png" alt="Operations Dashboard — main KPI monitoring view" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><img src=&quot;https://i.imgur.com/placeholder.png&quot; style=&quot;display:none&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Operations Dashboard<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_dashboard.png here</small></div></div>'"></div>
-        <div class="sinf"><div class="stk">Task 1 — Monitor KPIs</div><div class="snm">Operations Dashboard</div><div class="sds">Expandable KPI list · Expenses critical alert · AI efficiency insight card · Color-coded status</div></div>
+        <div class="sim" style="background:#1a0d2e"><img src="screen_dashboard.png" alt="Task 1: Monitor KPIs" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Monitor KPIs<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Dashboard & Alerts</small></div></div>'"></div>
+        <div class="sinf"><div class="stk">Task 1 — Monitor KPIs</div><div class="snm">Dashboard & Alert Detection</div><div class="sds">Expandable KPI list · Expenses critical alert · Color-coded status · One-tap investigate</div></div>
       </div>
 
       <div class="sca">
-        <div class="sim" style="background:#0d0d1a"><img src="screen_alert.png" alt="Customer Satisfaction Alert modal" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Alert Modal<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_alert.png here</small></div></div>'"></div>
-        <div class="sinf"><div class="stk">Task 1 — Alert Detection</div><div class="snm">AI-Triggered Alert</div><div class="sds">Customer Satisfaction alert · Clear anomaly description · Detection timestamp · One-tap Investigate CTA</div></div>
+        <div class="sim" style="background:#0f0d1f"><img src="screen_investigation.png" alt="Task 2: Investigate Anomaly" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Investigate<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>5-Step Guided Flow</small></div></div>'"></div>
+        <div class="sinf"><div class="stk">Task 2 — Investigate Anomaly</div><div class="snm">Guided Investigation Flow</div><div class="sds">5-step investigation · Root cause analysis · 82% confidence · Recommended interventions</div></div>
       </div>
 
       <div class="sca">
-        <div class="sim" style="background:#1a0a12"><img src="screen_success.png" alt="Ticket Created Success" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Ticket Success<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_success.png here</small></div></div>'"></div>
-        <div class="sinf"><div class="stk">Task 3 — Ticket Workflow</div><div class="snm">Ticket Created Success</div><div class="sds">Confirmation state after corrective action · clear completion signal · prevents uncertainty after submitting ticket</div></div>
+        <div class="sim" style="background:#0d0d1a"><img src="screen_ticket.png" alt="Task 3: Corrective Action" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Create Ticket<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Auto-Populated</small></div></div>'"></div>
+        <div class="sinf"><div class="stk">Task 3 — Create Action Ticket</div><div class="snm">Corrective Action</div><div class="sds">Auto-populated from investigation · Evidence bundle · Priority selection · Avg 2.7 min</div></div>
       </div>
 
       <div class="sca">
-        <div class="sim" style="background:#0f0d1f"><img src="screen_investigation.png" alt="Investigation Guide Step 2" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Investigation Guide<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_investigation.png here</small></div></div>'"></div>
-        <div class="sinf"><div class="stk">Task 2 — Investigate Anomaly</div><div class="snm">Investigation Guide: Step 2</div><div class="sds">5-step guided flow · AI identifies anomaly start: March 15 2:34 PM · Auto-fills date range</div></div>
+        <div class="sim" style="background:#1a0d0d"><img src="screen_report.png" alt="Task 4: Generate Report" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Generate Report<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Generate → Preview → Send</small></div></div>'"></div>
+        <div class="sinf"><div class="stk">Task 4 — Generate Report</div><div class="snm">Report Generation</div><div class="sds">Template selection · AI summary inline · Mandatory preview · Enforced review flow</div></div>
       </div>
 
       <div class="sca">
-        <div class="sim" style="background:#0d1a0d"><img src="screen_recommended.png" alt="Recommended Actions — 82% confidence" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Recommended Actions<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_recommended.png here</small></div></div>'"></div>
-        <div class="sinf"><div class="stk">Task 2 — AI Confidence</div><div class="snm">Recommended Actions</div><div class="sds">82% investigation confidence · Suggested interventions · Estimated impact (+5% satisfaction) shown</div></div>
-      </div>
-
-      <div class="sca">
-        <div class="sim" style="background:#0d0d1a"><img src="screen_ticket.png" alt="Create Corrective Action Ticket" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Create Ticket<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_ticket.png here</small></div></div>'"></div>
-        <div class="sinf"><div class="stk">Task 3 — Corrective Action</div><div class="snm">Create Action Ticket</div><div class="sds">Auto-populated title + description from investigation · Evidence bundle · Priority field · Avg 2.7 min</div></div>
-      </div>
-
-      <div class="sca">
-        <div class="sim" style="background:#1a0d0d"><img src="screen_report.png" alt="Generate Report modal" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Generate Report<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_report.png here</small></div></div>'"></div>
-        <div class="sinf"><div class="stk">Task 4 — Generate Report</div><div class="snm">Generate Report</div><div class="sds">Template selection · AI-generated summary inline · Generate & Preview enforces review · Rated 5/5</div></div>
-      </div>
-
-      <div class="sca">
-        <div class="sim" style="background:#0d1a12"><img src="screen_share.png" alt="Share Investigation Findings" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Share Findings<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_share.png here</small></div></div>'"></div>
-        <div class="sinf"><div class="stk">Task 5 — Share & Collaborate</div><div class="snm">Share Findings</div><div class="sds">One-tap share to Slack, Teams, Email, Jira · Auto-generated summary card · Editable root cause</div></div>
-      </div>
-
-      <div class="sca">
-        <div class="sim" style="background:#1a0d2e"><img src="screen_success.png" alt="Ticket Created Success" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Ticket Success<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Place screen_success.png here</small></div></div>'"></div>
-        <div class="sinf"><div class="stk">Task 3 — Confirmation</div><div class="snm">Ticket Created Success</div><div class="sds">Completion feedback screen validates submission · provides confidence before moving to reporting and sharing</div></div>
+        <div class="sim" style="background:#0d1a12"><img src="screen_share.png" alt="Task 5: Share Findings" onerror="this.parentElement.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center&quot;><div style=&quot;color:rgba(167,139,250,.5);font-size:.78rem&quot;>📱 Share Findings<br><small style=&quot;color:rgba(255,255,255,.25)&quot;>Multi-Channel</small></div></div>'"></div>
+        <div class="sinf"><div class="stk">Task 5 — Share & Collaborate</div><div class="snm">Multi-Channel Sharing</div><div class="sds">Share to Slack · Teams · Email · Jira · Platform-specific preview · Confirmation feedback</div></div>
       </div>
 
     </div>
@@ -593,12 +574,12 @@ footer p{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:.3rem}
 </section>
 
 <!-- BEFORE / AFTER -->
-<section>
+<section id="decisions">
   <div class="wrap">
     <p class="sl">05 — Design Decisions</p>
     <h2 class="st">Before & after — issues found,<br>evidence gathered, redesigned</h2>
     <p class="ss">Issues surfaced by Claude + Figma MCP heuristic evaluation and confirmed in live usability sessions. Each became a Stitch AI redesign prompt.</p>
-    <div style="margin-top:2.75rem">
+      <div style="margin-top:2.75rem;padding:0 1.5rem;max-width:1100px;margin-left:auto;margin-right:auto">
 
       <div class="bap">
         <div class="bac before">
@@ -826,11 +807,11 @@ footer p{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:.3rem}
     </div>
     <div style="margin:2.5rem 0 2rem">
       <h5 style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem;text-align:center">Generated Charts — Julius AI</h5>
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem">
-        <img src="Ekkta.github.io/website_images/avgtask.png" alt="Average Task Time Comparison" style="border-radius:12px;border:1px solid var(--bd);width:100%;height:auto">
-        <img src="Ekkta.github.io/website_images/errordistribution.png" alt="Error Distribution Chart" style="border-radius:12px;border:1px solid var(--bd);width:100%;height:auto">
-        <img src="Ekkta.github.io/website_images/satisfaction.png" alt="Satisfaction by Category" style="border-radius:12px;border:1px solid var(--bd);width:100%;height:auto">
-        <img src="Ekkta.github.io/website_images/usabilityscore.png" alt="Usability Score Breakdown" style="border-radius:12px;border:1px solid var(--bd);width:100%;height:auto">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;overflow-x:auto">
+          <img src="Ekkta.github.io/website_images/avgtask.png" alt="Average Task Time Comparison" style="border-radius:12px;border:1px solid var(--bd);width:100%;height:auto;max-height:180px">
+          <img src="Ekkta.github.io/website_images/errordistribution.png" alt="Error Distribution Chart" style="border-radius:12px;border:1px solid var(--bd);width:100%;height:auto;max-height:180px">
+          <img src="Ekkta.github.io/website_images/satisfaction.png" alt="Satisfaction by Category" style="border-radius:12px;border:1px solid var(--bd);width:100%;height:auto;max-height:180px">
+          <img src="Ekkta.github.io/website_images/usabilityscore.png" alt="Usability Score Breakdown" style="border-radius:12px;border:1px solid var(--bd);width:100%;height:auto;max-height:180px">
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:1.75rem">
