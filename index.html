@@ -187,8 +187,8 @@ h1 em{font-style:normal;color:var(--pl)}
 .tr{display:flex;flex-wrap:wrap;gap:.35rem}
 .tg{background:rgba(0,182,214,.12);border:1px solid rgba(0,182,214,.3);padding:.22rem .67rem;border-radius:20px;font-size:.7rem;color:#95ecff}
 .pq{border-left:2px solid var(--primary);padding:.95rem 1.08rem;background:rgba(0,182,214,.08);border-radius:0 var(--rs) var(--rs) 0;font-style:italic;color:var(--txt-dim);font-size:.9rem;line-height:1.68}
-.rs{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:2rem}
-.rc{padding:1.4rem;transition:transform .25s,border-color .25s,box-shadow .25s}
+.rs{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:2rem;align-items:stretch}
+.rc{padding:1.4rem;transition:transform .25s,border-color .25s,box-shadow .25s;display:flex;flex-direction:column}
 .rc h4{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#90ecff;margin-bottom:.9rem}
 .pi{font-size:.8rem;color:var(--txt-dim);padding:.42rem .7rem;background:rgba(255,255,255,.03);border-radius:8px;margin-bottom:.32rem;line-height:1.5}
 .jr{display:flex;justify-content:space-between;font-size:.77rem;padding:.4rem 0;border-bottom:1px solid var(--bd-soft)}
@@ -196,7 +196,7 @@ h1 em{font-style:normal;color:var(--pl)}
 .js{color:var(--muted)}.je{font-weight:600}
 .eb{color:#ff9898}.ew{color:#ffd16f}.eg{color:#77f2d5}.en{color:var(--txt-dim)}
 
-.pro{display:grid;grid-template-columns:repeat(5,1fr);gap:.58rem;margin-top:3.4rem;position:relative}
+.pro{display:grid;grid-template-columns:repeat(4,1fr);gap:.58rem;margin-top:3.4rem;position:relative}
 .pro::before{content:'';position:absolute;top:26px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent));z-index:0;opacity:.4}
 .ps2{text-align:center;position:relative;z-index:1}
 .pd{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));margin:0 auto .82rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.03rem;color:#032839;font-weight:800;border:2px solid #07203d;box-shadow:0 0 0 1px rgba(120,226,255,.7)}
@@ -341,7 +341,7 @@ footer p{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:.3rem}
   .sgr,.qg,.mg,.ag{grid-template-columns:1fr 1fr}
   .sk{grid-template-columns:1fr 1fr}
   .cg{grid-template-columns:1fr}
-  .pro{grid-template-columns:repeat(3,1fr)}
+  .pro{grid-template-columns:repeat(2,1fr)}
   .pro::before{display:none}
 }
 @media (max-width:740px){
@@ -501,6 +501,10 @@ footer p{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:.3rem}
         <div class="jr"><span class="js">Ticket Creation</span><span class="je eb">Frustrated → Overloaded</span></div>
         <div class="jr"><span class="js">Report Assembly</span><span class="je ew">Overloaded</span></div>
         <div class="jr"><span class="js">Collaboration</span><span class="je eg">Tired → Relieved</span></div>
+        <div style="margin-top:.9rem;padding:.6rem .7rem;border:1px dashed var(--bd-soft);border-radius:8px;font-size:.73rem;color:var(--txt-dim);line-height:1.55">
+          <strong>Reading:</strong> Emotional drop is concentrated in investigation and ticket creation where users must verify and re-enter context.
+        </div>
+        <div style="margin-top:.5rem;font-size:.72rem;color:var(--muted);line-height:1.5">Design focus: reduce context switching, make root cause explicit earlier, and automate ticket handoff.</div>
       </div>
     </div>
   </div>
@@ -517,6 +521,8 @@ footer p{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:.3rem}
       <div class="ps2"><div class="pd">2</div><div class="plb">Define</div><div class="psb">PRD · 55 functional reqs · Task analysis</div></div>
       <div class="ps2"><div class="pd">3</div><div class="plb">Lo-Fi</div><div class="psb">Stitch AI wireframes · 5 tasks</div></div>
       <div class="ps2"><div class="pd">4</div><div class="plb">Hi-Fi</div><div class="psb">23 Figma screens · Heuristic eval</div></div>
+    </div>
+    <div style="max-width:260px;margin:1rem auto 0">
       <div class="ps2"><div class="pd">5</div><div class="plb">Test</div><div class="psb">5 moderated sessions · 8.89/10</div></div>
     </div>
   </div>
@@ -764,7 +770,7 @@ footer p{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:.3rem}
     <div class="mg">
       <div class="mc g"><div class="mn">100%</div><div class="mlb">Task success rate</div><div class="ms">25/25 tasks completed across all participants</div><div class="mb" style="width:100%"></div></div>
       <div class="mc g"><div class="mn">4.72</div><div class="mlb">Avg satisfaction /5</div><div class="ms">Across 22 Likert items and 7 survey categories</div><div class="mb" style="width:94%"></div></div>
-      <div class="mc re"><div class="mn">3.80</div><div class="mlb">Lowest: AI trust /5</div><div class="ms">3/5 participants wanted formula breakdown for confidence score</div><div class="mb" style="width:76%"></div></div>
+      <div class="mc re"><div class="mn">3.80</div><div class="mlb">Lowest: AI trust /5</div><div class="ms">Users requested clearer confidence logic.</div><div class="mb" style="width:76%"></div></div>
       <div class="mc am2"><div class="mn">0.28</div><div class="mlb">Avg errors / task</div><div class="ms">Well below 1.0 threshold · T5 Report had zero errors</div><div class="mb" style="width:28%"></div></div>
       <div class="mc pu2"><div class="mn">13.5</div><div class="mlb">P4 Task 4 outlier (min)</div><div class="ms">4.5× over 3-min target · Missing post-share confirmation → critical redesign</div><div class="mb" style="width:82%"></div></div>
       <div class="mc g"><div class="mn">5/5</div><div class="mlb">Would use in real work</div><div class="ms">All participants confirmed intent to adopt in their professional workflow</div><div class="mb" style="width:100%"></div></div>
